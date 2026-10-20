@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Hacker Typer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Fondo Matrix -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Terminal Principal -->
+    <div id="terminal-container">
+        <div id="terminal-output"></div>
+    </div>
+
+    <!-- Ventanas Flotantes -->
+    <div id="mini-window-1" class="mini-window hidden">
+        <div class="window-header">⚠️ SISTEMA_OVERRIDE.exe</div>
+        <div class="window-content" id="ascii-art-display">Cargando imágenes...</div>
+    </div>
+
+    <div id="mini-window-2" class="mini-window hidden">
+        <div class="window-header">⚡ HACK_TOOLS.sh</div>
+        <div class="window-content">
+            <p id="hack-text">Hackeando todos los sistemas...</p>
+            <div class="progress-bar"><div class="progress-fill" id="hack-progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Juego del Dinosaurio -->
+    <div id="game-container" class="hidden">
+        <canvas id="dinoCanvas" width="800" height="300"></canvas>
+        <div id="game-over-msg" class="hidden">GAME OVER - Presiona ESPACIO para volver</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
