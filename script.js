@@ -273,6 +273,6 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && !hackedScreen.classList.contains('hidden')) {
         hackedScreen.classList.add('hidden');
         metalslugContainer.classList.remove('hidden');
-        metalslugFrame.src = "metalslug/index.html";
+        metalslugFrame.src = "https://andrea-zero.github.io/metal-assault-game-claude-fable/";
     }
 });
