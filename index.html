@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Hacker Typer → Metal Slug</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Fondo Matrix -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Terminal Principal -->
+    <div id="terminal-container">
+        <div id="terminal-output"></div>
+    </div>
+
+    <!-- Ventanas Flotantes del Hackeo -->
+    <div id="mini-window-1" class="mini-window hidden">
+        <div class="window-header">⚠️ VISUALIZADOR_ASCII.exe</div>
+        <div class="window-content" id="ascii-art-display"></div>
+    </div>
+
+    <div id="mini-window-2" class="mini-window hidden">
+        <div class="window-header">⚡ HACK_TOOLS.sh</div>
+        <div class="window-content">
+            <p id="hack-text">Hackeando todos los sistemas...</p>
+            <div class="progress-bar"><div class="progress-fill" id="hack-progress"></div></div>
+        </div>
+    </div>
+
+    <div id="mini-window-3" class="mini-window hidden">
+        <div class="window-header">🧮 MATH_CORE.c</div>
+        <div class="window-content" id="math-display"></div>
+    </div>
+
+    <!-- Pantalla de Game Over (Sin máscara) -->
+    <div id="game-over-screen" class="hidden">
+        <h1>GAME OVER</h1>
+        <p class="blink">Presiona ESPACIO para jugar Metal Slug</p>
+    </div>
+
+    <!-- Contenedor del Juego Metal Slug (iframe) -->
+    <div id="metalslug-container" class="hidden">
+        <iframe id="metalslug-frame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
