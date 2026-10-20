@@ -63,10 +63,9 @@ body {
     color: #00ffaa;
 }
 
-/* Posiciones de las ventanas */
 #mini-window-1 { top: 5%; right: 5%; }
 #mini-window-2 { top: 40%; right: 5%; }
-#mini-window-3 { bottom: 5%; left: 5%; width: 300px; } /* No tapa el código */
+#mini-window-3 { bottom: 5%; left: 5%; width: 300px; }
 
 .progress-bar {
     width: 100%;
@@ -83,7 +82,6 @@ body {
     transition: width 0.1s;
 }
 
-/* Animación de colores para el ASCII (Corazón y Cohete) */
 .rainbow-text {
     animation: colorRotate 1.5s linear infinite;
 }
@@ -98,8 +96,8 @@ body {
 
 .hidden { display: none !important; }
 
-/* Contenedor Juego Geometry Dash */
-#game-container {
+/* Contenedores de Juegos */
+#game-container, #metalslug-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -107,7 +105,7 @@ body {
     z-index: 30;
 }
 
-#dashCanvas {
+#dashCanvas, #metalslugCanvas {
     border: 3px solid #00ffff;
     background-color: rgba(0, 0, 0, 0.85);
     box-shadow: 0 0 30px #00ffff;
@@ -138,20 +136,3 @@ body {
     animation: blinker 1s linear infinite;
 }
 @keyframes blinker { 50% { opacity: 0; } }
-
-/* Contenedor del Juego Metal Slug */
-#metalslug-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 50;
-    background: #000;
-}
-
-#metalslug-frame {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
