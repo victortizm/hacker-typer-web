@@ -66,8 +66,7 @@ body {
 /* Posiciones de las ventanas */
 #mini-window-1 { top: 5%; right: 5%; }
 #mini-window-2 { top: 40%; right: 5%; }
-/* Movemos la ventana de matemáticas a la esquina inferior izquierda para que no tape el código */
-#mini-window-3 { bottom: 5%; left: 5%; width: 300px; }
+#mini-window-3 { bottom: 5%; left: 5%; width: 300px; } /* No tapa el código */
 
 .progress-bar {
     width: 100%;
@@ -84,17 +83,17 @@ body {
     transition: width 0.1s;
 }
 
-/* Animación de colores para el ASCII */
+/* Animación de colores para el ASCII (Corazón y Cohete) */
 .rainbow-text {
     animation: colorRotate 1.5s linear infinite;
 }
 
 @keyframes colorRotate {
-    0%   { color: #00ffff; text-shadow: 0 0 5px #00ffff; } /* Cyan */
-    25%  { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; } /* Magenta */
-    50%  { color: #ffff00; text-shadow: 0 0 5px #ffff00; } /* Amarillo */
-    75%  { color: #00ff00; text-shadow: 0 0 5px #00ff00; } /* Verde */
-    100% { color: #00ffff; text-shadow: 0 0 5px #00ffff; } /* Cyan */
+    0%   { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
+    25%  { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
+    50%  { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
+    75%  { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+    100% { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
 }
 
 .hidden { display: none !important; }
@@ -110,7 +109,7 @@ body {
 
 #dashCanvas {
     border: 3px solid #00ffff;
-    background-color: rgba(0, 0, 0, 0.85); /* Transparente para ver el código detrás */
+    background-color: rgba(0, 0, 0, 0.85);
     box-shadow: 0 0 30px #00ffff;
 }
 

@@ -42,11 +42,11 @@ const metalslugFrame = document.getElementById('metalslug-frame');
 
 let keysPressed = 0;
 let codeIndex = 0;
-const maxKeys = 100; // Bajar un poco para que empiece el juego más rápido
+const maxKeys = 100;
 
 const fakeCode = `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <math.h>\n\n/* Kernel exploit */\ntypedef struct { char ip[16]; int port; } Target;\n\nvoid bypass_firewall(Target *t) {\n    printf("[*] Escaneando %s...\\n", t->ip);\n    for(int i=0; i<65535; i++) {\n        if(i == 443) printf("[+] Puerto abierto\\n");\n    }\n}\n\nint main() {\n    while(1) {\n        printf("Inyectando payload...\\n");\n        sleep(1);\n    }\n    return 0;\n}\n\n/* Derivadas e integrales */\ndouble f(double x) { return x*x + sin(x); }\ndouble df(double x) { return 2*x + cos(x); }\ndouble integrate(double a, double b) { return (b*b*b - a*a*a)/3.0; }\n\n// BOOM...\n`;
 
-// ASCII Art: Corazón y Cohete (en bucle)
+// Solo el corazón y el cohete en bucle
 const asciiArts = [
 `  <3 <3 <3
  <3       <3
@@ -143,7 +143,7 @@ function startGeometryDash() {
     win3.classList.add('hidden');
     gameContainer.classList.remove('hidden');
     
-    startAutoType(); // Empieza a escribir en el fondo
+    startAutoType(); 
     
     player = { x: 50, y: 300, size: 30, vy: 0, gravity: 0.8, jumpForce: -13, grounded: true };
     obstacles = [];
@@ -168,7 +168,7 @@ document.addEventListener('keydown', (e) => {
 function updateDash() {
     if (!dashActive) return;
 
-    dashScore += 5; // Sube rápido para llegar a 2000
+    dashScore += 5; 
 
     // Física del jugador
     player.vy += player.gravity;
@@ -179,22 +179,21 @@ function updateDash() {
         player.grounded = true;
     }
 
-    // Generar obstáculos (pinchos)
+    // Generar obstáculos
     if (Math.random() < 0.03 && !dragonActive) {
         obstacles.push({ x: 800, y: 330, width: 20, height: 20, type: 'spike' });
     }
 
-    // Activar el Dragón a los 2000 puntos
+    // Activar Dragón a los 2000 puntos
     if (dashScore >= 2000 && !dragonActive) {
         dragonActive = true;
-        dashSpeed = 15; // Se acelera
+        dashSpeed = 15; 
     }
 
-    // Actualizar obstáculos y colisiones
+    // Mover obstáculos y colisiones
     for (let i = obstacles.length - 1; i >= 0; i--) {
         obstacles[i].x -= dashSpeed;
         
-        // Colisión (AABB simplificado)
         if (
             player.x < obstacles[i].x + obstacles[i].width &&
             player.x + player.size > obstacles[i].x &&
@@ -209,7 +208,8 @@ function updateDash() {
     }
 
     // Colisión con el dragón
-    if (dragonActive && 800 - (dashScore - 2000) * 0.5 < player.x + player.size) {
+    let dragonPosX = 800 - (dashScore - 2000) * 1.5;
+    if (dragonActive && dragonPosX < player.x + player.size) {
         endDash();
         return;
     }
@@ -217,18 +217,17 @@ function updateDash() {
     // Dibujar
     dCtx.clearRect(0, 0, 800, 400);
     
-    // Suelo
     dCtx.strokeStyle = "#00ffff";
     dCtx.beginPath();
     dCtx.moveTo(0, 350);
     dCtx.lineTo(800, 350);
     dCtx.stroke();
 
-    // Jugador (Cuadrado)
+    // Jugador
     dCtx.fillStyle = "#ffff00";
     dCtx.fillRect(player.x, player.y, player.size, player.size);
 
-    // Obstáculos (Pinchos)
+    // Obstáculos
     dCtx.fillStyle = "#ff0000";
     obstacles.forEach(obs => {
         dCtx.beginPath();
@@ -238,12 +237,11 @@ function updateDash() {
         dCtx.fill();
     });
 
-    // Dibujar Dragón (Si está activo)
+    // Dragón
     if (dragonActive) {
         dCtx.fillStyle = "#ff0000";
         dCtx.font = "80px monospace";
-        dCtx.fillText("🐉", 800 - (dashScore - 2000) * 0.5, 340); // Usamos emoji para simplificar, o dibujamos una forma
-        // Si no quieres emoji, aquí se dibujaría la cabeza y alas del dragón con paths.
+        dCtx.fillText("🐉", dragonPosX, 340); 
     }
 
     // Puntos
@@ -267,12 +265,13 @@ function endDash() {
 }
 
 // --------------------------------------------------------
-// 4. METAL SLUG
+// 4. METAL SLUG (Cargado desde internet para evitar errores)
 // --------------------------------------------------------
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && !hackedScreen.classList.contains('hidden')) {
         hackedScreen.classList.add('hidden');
         metalslugContainer.classList.remove('hidden');
+        // URL externa directa para que funcione sin importar tus carpetas
         metalslugFrame.src = "https://andrea-zero.github.io/metal-assault-game-claude-fable/";
     }
 });
