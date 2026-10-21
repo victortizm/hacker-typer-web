@@ -40,8 +40,7 @@ const gameContainer = document.getElementById('game-container');
 
 let keysPressed = 0;
 let codeIndex = 0;
-// HACKEO MAS RÁPIDO: Solo 60 teclas en lugar de 100
-const maxKeys = 60;
+const maxKeys = 60; // 60 teclas para que empiece el juego
 
 const fakeCode = `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <math.h>\n\n/* Kernel exploit */\ntypedef struct { char ip[16]; int port; } Target;\n\nvoid bypass_firewall(Target *t) {\n    printf("[*] Escaneando %s...\\n", t->ip);\n    for(int i=0; i<65535; i++) {\n        if(i == 443) printf("[+] Puerto abierto\\n");\n    }\n}\n\nint main() {\n    while(1) {\n        printf("Inyectando payload...\\n");\n        sleep(1);\n    }\n    return 0;\n}\n\n/* Derivadas e integrales */\ndouble f(double x) { return x*x + sin(x); }\ndouble df(double x) { return 2*x + cos(x); }\ndouble integrate(double a, double b) { return (b*b*b - a*a*a)/3.0; }\n\n// BOOM...\n`;
 
@@ -61,9 +60,9 @@ const mathFormulas = [
 ];
 
 function typeCode(e) {
+    // Si estamos en el juego o en la pantalla de hackeado, ignorar
     if (!gameContainer.classList.contains('hidden') || 
-        !hackedScreen.classList.contains('hidden') || 
-        !metalslugContainer.classList.contains('hidden')) return;
+        !hackedScreen.classList.contains('hidden')) return;
     
     if (e.key === "Escape") { location.reload(); return; }
     if (e.key.length !== 1 && e.key !== "Enter") return;
@@ -103,24 +102,15 @@ function typeCode(e) {
 document.addEventListener('keydown', typeCode);
 
 // --------------------------------------------------------
-// 3. GEOMETRY DASH + TIBURÓN ASCII
+// 3. GEOMETRY DASH (Sin tiburón, muerte instantánea con triángulos)
 // --------------------------------------------------------
 const dashCanvas = document.getElementById('dashCanvas');
 const dCtx = dashCanvas.getContext('2d');
-const hackedTitle = document.querySelector('#hacked-screen h1');
 
-let player, obstacles, dashScore, dashSpeed, dashActive, sharkActive, dashLoop;
+let player, obstacles, dashScore, dashSpeed, dashActive, dashLoop;
 let autoTypeInterval;
 
-// Tiburón en ASCII art mirando hacia la izquierda
-const sharkASCII = [
-    "       __",
-    "      / _)",
-    ".-^^^-/ /",
-    " __/   /",
-    "<__.|_|-|_|"
-];
-
+// Función para escribir código automáticamente en el fondo mientras juegas
 function startAutoType() {
     autoTypeInterval = setInterval(() => {
         for (let i = 0; i < 3; i++) {
@@ -141,13 +131,11 @@ function startGeometryDash() {
     gameContainer.classList.remove('hidden');
     startAutoType(); 
     
-    // FÍSICA CORREGIDA: El jugador ahora descansa exactamente sobre el suelo (y=320 + size 30 = 350)
     player = { x: 50, y: 320, size: 30, vy: 0, gravity: 0.8, jumpForce: -14, grounded: true };
     obstacles = [];
     dashScore = 0;
     dashSpeed = 8;
     dashActive = true;
-    sharkActive = false;
 
     if (dashLoop) cancelAnimationFrame(dashLoop);
     updateDash();
@@ -166,6 +154,7 @@ function updateDash() {
     if (!dashActive) return;
     dashScore += 5; 
 
+    // Física del jugador
     player.vy += player.gravity;
     player.y += player.vy;
     if (player.y >= 320) {
@@ -174,45 +163,35 @@ function updateDash() {
         player.grounded = true;
     }
 
-    if (Math.random() < 0.03 && !sharkActive) {
-        obstacles.push({ x: 800, y: 330, width: 20, height: 20 }); // Pinchos en el suelo (y=330, height=20 -> tope 350)
-    }
-
-    if (dashScore >= 2000 && !sharkActive) {
-        sharkActive = true;
-        dashSpeed = 15; 
+    // Generar obstáculos (triángulos)
+    if (Math.random() < 0.03) {
+        obstacles.push({ x: 800, y: 330, width: 20, height: 20 });
     }
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
         obstacles[i].x -= dashSpeed;
         
-        // COLISIÓN MEJORADA CON LOS PINCHOS
+        // Colisión: Si toca el triángulo, muere inmediatamente
         if (player.x < obstacles[i].x + obstacles[i].width && 
             player.x + player.size > obstacles[i].x &&
             player.y < obstacles[i].y + obstacles[i].height && 
             player.y + player.size > obstacles[i].y) {
-            endDash();
+            endDash(); // Activa la pantalla de HACKEADO
             return;
         }
         if (obstacles[i].x < -50) obstacles.splice(i, 1);
     }
 
-    // El tiburón va más lento para que se sienta la persecución
-    let sharkPosX = 800 - (dashScore - 2000) * 0.6;
-    if (sharkActive && sharkPosX < player.x + player.size) {
-        endDash();
-        return;
-    }
-
+    // Renderizado
     dCtx.clearRect(0, 0, 800, 400);
     dCtx.strokeStyle = "#00ffff";
     dCtx.beginPath(); dCtx.moveTo(0, 350); dCtx.lineTo(800, 350); dCtx.stroke();
 
-    // Dibujar Jugador
+    // Jugador
     dCtx.fillStyle = "#ffff00";
     dCtx.fillRect(player.x, player.y, player.size, player.size);
 
-    // Dibujar Pinchos
+    // Triángulos
     dCtx.fillStyle = "#ff0000";
     obstacles.forEach(obs => {
         dCtx.beginPath();
@@ -222,17 +201,7 @@ function updateDash() {
         dCtx.fill();
     });
 
-    // Dibujar Tiburón ASCII
-    if (sharkActive) {
-        dCtx.fillStyle = "#ff0000";
-        dCtx.font = "18px monospace";
-        for (let i = 0; i < sharkASCII.length; i++) {
-            dCtx.fillText(sharkASCII[i], sharkPosX, 260 + i * 18);
-        }
-        dCtx.font = "20px monospace";
-        dCtx.fillText("¡EL TIBURÓN SE ACERCA!", 200, 40);
-    }
-
+    // Puntos
     dCtx.fillStyle = "#00ffff";
     dCtx.font = "20px monospace";
     dCtx.fillText("PUNTOS: " + dashScore, 650, 40);
@@ -240,100 +209,20 @@ function updateDash() {
     dashLoop = requestAnimationFrame(updateDash);
 }
 
+// Función que se ejecuta al morir
 function endDash() {
     dashActive = false;
     clearInterval(autoTypeInterval);
     gameContainer.classList.add('hidden');
-    hackedScreen.classList.remove('hidden');
+    hackedScreen.classList.remove('hidden'); // Muestra HACKEADO
 }
 
 // --------------------------------------------------------
-// 4. METAL SLUG INTEGRADO
+// 4. REDIRECCIÓN AL JUEGO EXTERNO (Mata el 404 de raíz)
 // --------------------------------------------------------
-const metalslugContainer = document.getElementById('metalslug-container');
-const msCanvas = document.getElementById('metalslugCanvas');
-const msCtx = msCanvas.getContext('2d');
-
-let msActive = false;
-let msPlayer, msBullets, msEnemies, msScore, msLoop;
-
 document.addEventListener('keydown', (e) => {
+    // Si presionan Espacio en la pantalla de HACKEADO, redirigimos a la URL oficial
     if (e.code === 'Space' && !hackedScreen.classList.contains('hidden')) {
-        hackedScreen.classList.add('hidden');
-        metalslugContainer.classList.remove('hidden');
-        startMetalSlug();
+        window.location.href = "https://m-assault-fable.netlify.app";
     }
 });
-
-function startMetalSlug() {
-    msActive = true;
-    msPlayer = { x: 50, y: 180, size: 30, speed: 20 };
-    msBullets = [];
-    msEnemies = [];
-    msScore = 0;
-    updateMetalSlug();
-}
-
-document.addEventListener('keydown', (e) => {
-    if (!msActive) return;
-    if (e.key === 'ArrowUp') msPlayer.y = Math.max(0, msPlayer.y - msPlayer.speed);
-    if (e.key === 'ArrowDown') msPlayer.y = Math.min(400 - msPlayer.size, msPlayer.y + msPlayer.speed);
-    if (e.code === 'Space') {
-        e.preventDefault();
-        msBullets.push({ x: msPlayer.x + msPlayer.size, y: msPlayer.y + msPlayer.size/2, speed: 15 });
-    }
-});
-
-function updateMetalSlug() {
-    if (!msActive) return;
-
-    if (Math.random() < 0.03) {
-        msEnemies.push({ x: 800, y: Math.random() * 350, size: 30, speed: 6 });
-    }
-
-    for (let i = msBullets.length - 1; i >= 0; i--) {
-        msBullets[i].x += msBullets[i].speed;
-        if (msBullets[i].x > 800) msBullets.splice(i, 1);
-    }
-
-    for (let i = msEnemies.length - 1; i >= 0; i--) {
-        msEnemies[i].x -= msEnemies[i].speed;
-        
-        if (msEnemies[i].x < msPlayer.x + msPlayer.size && msEnemies[i].x + msEnemies[i].size > msPlayer.x &&
-            msEnemies[i].y < msPlayer.y + msPlayer.size && msEnemies[i].y + msEnemies[i].size > msPlayer.y) {
-            msActive = false;
-            alert("¡MISIÓN FALLIDA! El enemigo te atrapó.\nPresiona OK para reiniciar todo el hackeo.");
-            location.reload();
-            return;
-        }
-
-        for (let j = msBullets.length - 1; j >= 0; j--) {
-            if (msBullets[j].x < msEnemies[i].x + msEnemies[i].size && msBullets[j].x > msEnemies[i].x &&
-                msBullets[j].y < msEnemies[i].y + msEnemies[i].size && msBullets[j].y > msEnemies[i].y) {
-                msEnemies.splice(i, 1);
-                msBullets.splice(j, 1);
-                msScore += 100;
-                break;
-            }
-        }
-    }
-
-    msCtx.fillStyle = "#000";
-    msCtx.fillRect(0, 0, 800, 400);
-
-    msCtx.fillStyle = "#00ffff";
-    msCtx.fillRect(msPlayer.x, msPlayer.y, msPlayer.size, msPlayer.size);
-
-    msCtx.fillStyle = "#ffff00";
-    msBullets.forEach(b => msCtx.fillRect(b.x, b.y, 15, 5));
-
-    msCtx.fillStyle = "#ff0000";
-    msEnemies.forEach(e => msCtx.fillRect(e.x, e.y, e.size, e.size));
-
-    msCtx.fillStyle = "#fff";
-    msCtx.font = "20px monospace";
-    msCtx.fillText("SCORE: " + msScore, 650, 40);
-    msCtx.fillText("FLECHAS: Mover | ESPACIO: Disparar", 20, 40);
-
-    msLoop = requestAnimationFrame(updateMetalSlug);
-}

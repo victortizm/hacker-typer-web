@@ -96,8 +96,8 @@ body {
 
 .hidden { display: none !important; }
 
-/* Contenedores de Juegos */
-#game-container, #metalslug-container {
+/* Contenedor Juego Geometry Dash */
+#game-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,7 +105,7 @@ body {
     z-index: 30;
 }
 
-#dashCanvas, #metalslugCanvas {
+#dashCanvas {
     border: 3px solid #00ffff;
     background-color: rgba(0, 0, 0, 0.85);
     box-shadow: 0 0 30px #00ffff;
